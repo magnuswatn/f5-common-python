@@ -117,6 +117,9 @@ class Ssl_Cert(Resource):
             'tm:sys:file:ssl-cert:ssl-certstate'
         self._meta_data['required_creation_parameters'].update(
             ('name', 'sourcePath'))
+        self._meta_data['attribute_registry'] = {
+            'tm:sys:file:ssl-cert:bundle-certificates:bundle-certificatescollectionstate': Bundle_certificates_s
+        }
 
     def modify(self, **kwargs):
         '''Modify is not supported for iFiles
@@ -126,6 +129,24 @@ class Ssl_Cert(Resource):
         raise UnsupportedMethod(
             "%s does not support the update method" % self.__class__.__name__
         )
+
+class Bundle_certificates_s(Collection):
+    """BIG-IP® System sys file ssl-certs bundle-certificates collection."""
+    def __init__(self, pool):
+        super(Bundle_certificates_s, self).__init__(pool)
+        self._meta_data['required_json_kind'] =\
+            'tm:sys:file:ssl-cert:bundle-certificates:bundle-certificatescollectionstate'
+        self._meta_data['allowed_lazy_attributes'] = [Bundle_certificates]
+        self._meta_data['attribute_registry'] =\
+            {'tm:sys:file:ssl-cert:bundle-certificates:bundle-certificatesstate': Bundle_certificates}
+
+class Bundle_certificates(Resource):
+    """BIG-IP® System sys file ssl-certs bundle-certificates resource."""
+    def __init__(self, pool):
+        super(Bundle_certificates, self).__init__(pool)
+
+        self._meta_data['required_json_kind'] =\
+            'tm:sys:file:ssl-cert:bundle-certificates:bundle-certificatesstate'
 
 
 class Ssl_Crls(Collection):
